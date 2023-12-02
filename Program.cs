@@ -34,8 +34,15 @@ builder.Services.AddOrchardCore()
         s.AddTagHelpers<ResourcesTagHelper>();
         s.AddTagHelpers<ScriptTagHelper>();
         s.AddTagHelpers<StyleTagHelper>();
-    });
-
+    })
+    .Configure((app, routes, services) =>
+     {
+         routes.MapAreaControllerRoute(
+             name: "home",
+             areaName: "DashboardApplication",
+             pattern: "/",
+             defaults: new { controller = "Home", action = "Index" });
+     });
 
 var app = builder.Build();
 
@@ -50,6 +57,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseOrchardCore();
+
 //app.UseRouting();
 
 //app.UseAuthorization();
@@ -58,6 +67,8 @@ app.UseStaticFiles();
 //    name: "default",
 //    pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.UseOrchardCore();
+//app.MapControllerRoute(name: "home",
+//                pattern: "/",
+//                defaults: new { controller = "Home", action = "Index" });
 
 app.Run();
